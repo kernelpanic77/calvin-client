@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MapGL, { GeolocateControl, Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import marker from "./../assets/marker.png";
 import axios from "axios";
+import Amadeus from "amadeus";
+import {
+  Dropdown,
+  InputGroup,
+  FormControl,
+  DropdownButton,
+} from "react-bootstrap";
 const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const geolocateStyle = {
@@ -12,6 +19,23 @@ const geolocateStyle = {
 };
 
 const Map = () => {
+  useEffect(() => {
+    const amadeus = new Amadeus({
+      clientId: "V6rUCDGrsB77XkbNmQiMYmJj0a5m2YzA",
+      clientSecret: "TJQC4nss8yPbRSEd",
+    });
+
+    amadeus.referenceData.locations.pointsOfInterest
+      .get({
+        latitude: 17.385,
+        longitude: 78.4867,
+      })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   const [viewport, setViewPort] = useState({
     width: "100vw",
     height: "100vh",
@@ -41,7 +65,7 @@ const Map = () => {
     const parameters = {
       client_id: "SUFVHQILGHMPEPHBJIOJOMNXA5ZQUDY4YI1JQZHXWLMH2MDA",
       client_secret: "RG45BFLYYVBAE0TNJHBTJ1513RRSJXZBXJJV01TXF3UUILKL",
-      ll: latitude + "," + longitude,
+      ll: "12.967758,77.754238",
       query: "sights",
       v: "20182507",
     };
@@ -60,12 +84,22 @@ const Map = () => {
 
   return (
     <div style={{ margin: "0 auto" }}>
-      <h1
-        style={{ textAlign: "center", fontSize: "25px", fontWeight: "bolder" }}
-      >
-        GeoLocator: Click To Find Your Location or click{" "}
-        <a href="/search">here</a> to search for a location
-      </h1>
+      <InputGroup className="mb-3">
+        <DropdownButton
+          as={InputGroup.Prepend}
+          variant="outline-secondary"
+          title="Dropdown"
+          id="input-group-dropdown-1"
+        >
+          <Dropdown.Item href="#">Action</Dropdown.Item>
+          <Dropdown.Item href="#">Another action</Dropdown.Item>
+          <Dropdown.Item href="#">Something else here</Dropdown.Item>
+          <Dropdown.Divider />
+          <Dropdown.Item href="#">Separated link</Dropdown.Item>
+        </DropdownButton>
+        <FormControl aria-describedby="basic-addon1" />
+      </InputGroup>
+
       <MapGL
         {...viewport}
         mapboxApiAccessToken={TOKEN}
