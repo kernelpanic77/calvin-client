@@ -32,10 +32,6 @@ export const routes = [
     endpoint: "4bf58dd8d48988d182941735",
   },
   {
-    action: "Theme Park",
-    endpoint: "4bf58dd8d48988d182941735",
-  },
-  {
     action: "College & University",
     endpoint: "4d4b7105d754a06372d81259",
   },
