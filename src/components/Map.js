@@ -21,6 +21,55 @@ const geolocateStyle = {
   padding: "10px",
 };
 
+//++++++++++++++++++++++++++++++++++++
+const university = [
+  {
+    name: "Arts & Science College",
+    covidRating: "3.2",
+  },
+  {
+    name: "Training and Placement",
+    covidRating: "1.5",
+  },
+  {
+    name: "Jawahar Navodaya Vidyalaya",
+    covidRating: "2.5",
+  },
+  {
+    name: "SRR Junior College",
+    covidRating: "4",
+  },
+];
+
+const Food = [
+  {
+    name: "Cream Stone",
+    covidRating: "3",
+  },
+  {
+    name: "Ramesh TeaShop",
+    covidRating: "2.5",
+  },
+  {
+    name: "Subway",
+    covidRating: "3",
+  },
+  {
+    name: "Mainland for Veggies",
+    covidRating: "2.2",
+  },
+  {
+    name: "FoodLand Restaurant",
+    covidRating: "4.6",
+  },
+  {
+    name: "Baba Tiffins",
+    covidRating: "5",
+  },
+];
+
+let dataToSend;
+
 export const Map = () => {
   const [viewport, setViewPort] = useState({
     width: "100vw",
@@ -69,7 +118,7 @@ export const Map = () => {
       }
     );
     // getSights();
-      handleShowModal();
+    handleShowModal();
     // await this.props.showModal({ latitude, longitude });
   };
 
@@ -80,7 +129,7 @@ export const Map = () => {
         const body = { fourSquareId: fourSquareId };
         const url = "http://localhost:5000/location/" + element.id;
         const res = await axios.get(url);
-        console.log(res);
+        console.log(res.date.place);
       } catch (err) {
         console.log(err);
       }
@@ -136,9 +185,19 @@ export const Map = () => {
     setViewPort({ ...viewport, transitionDuration: 100 });
   };
 
+  if (currentRoute === "4d4b7105d754a06372d81259") {
+    dataToSend = university;
+  } else {
+    dataToSend = Food;
+  }
   return (
     <div style={{ margin: "0 auto" }}>
-      <VerticleModal show={showModal} onHide={() => handleCloseModal()} LocType={currentRoute} />
+      <VerticleModal
+        content={dataToSend}
+        show={showModal}
+        onHide={() => handleCloseModal()}
+        LocType={currentRoute}
+      />
       <InputGroup className="mb-3">
         <DropdownButton
           as={InputGroup.Prepend}
