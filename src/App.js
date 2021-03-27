@@ -10,7 +10,10 @@ function App() {
 
   return (
     <Fragment>
-      <div className="App">{auth === true ? <Map /> : <Error />}</div>
+      {/* <div className="App">{auth === true ? <Map /> : <Error />}</div> */}
+      <div className="App">
+        <Map />
+      </div>
     </Fragment>
   );
 }
