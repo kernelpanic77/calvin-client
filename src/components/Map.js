@@ -31,11 +31,11 @@ const Map = () => {
   });
 
   const [fourSquareResponse, SetFourSquareResponse] = useState([]);
-
   const [currentRoute, setCurrentRoute] = useState();
 
   useEffect(() => {
     getSights();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentRoute]);
 
   useEffect(() => {
