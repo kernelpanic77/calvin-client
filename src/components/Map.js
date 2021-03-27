@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import MapGL, { GeolocateControl, Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import marker from "./../assets/marker.png";
+import axios from "axios";
 const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const geolocateStyle = {
@@ -27,7 +28,27 @@ const Map = () => {
       longitude: longitude,
       zoom: prevState.zoom + 2,
     }));
+
+    getSights(viewport.latitude, viewport.longitude);
+
     // await this.props.showModal({ latitude, longitude });
+  };
+
+  const getSights = async (latitude, longitude) => {
+    const endpoint = "https://api.foursquare.com/v2/venues/search?";
+    const parameters = {
+      client_id: "SUFVHQILGHMPEPHBJIOJOMNXA5ZQUDY4YI1JQZHXWLMH2MDA",
+      client_secret: "RG45BFLYYVBAE0TNJHBTJ1513RRSJXZBXJJV01TXF3UUILKL",
+      ll: latitude + "," + longitude,
+      query: "sights",
+      v: "20182507",
+    };
+    try {
+      const data = await axios.get(endpoint + new URLSearchParams(parameters));
+      console.log(data);
+    } catch (err) {
+      console.log(err.messag);
+    }
   };
 
   const _onViewportChange = (viewport) => {
@@ -54,6 +75,7 @@ const Map = () => {
             <img src={marker} width="50px" />
           </div>
         </Marker>
+
         <GeolocateControl
           style={geolocateStyle}
           positionOptions={{ enableHighAccuracy: true }}
