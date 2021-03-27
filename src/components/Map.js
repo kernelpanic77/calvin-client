@@ -11,6 +11,8 @@ import {
 } from "react-bootstrap";
 import { routes } from "../utils/Mapper";
 
+import VerticleModal from "./VerticleModal";
+
 const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const geolocateStyle = {
@@ -40,6 +42,11 @@ const Map = () => {
     console.log(fourSquareResponse);
   }, [fourSquareResponse]);
 
+  const [showModal, setShowModal] = useState(false);
+
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
+
   const handleMapClick = async (e) => {
     const [longitude, latitude] = e.lngLat;
     setViewPort(
@@ -55,6 +62,7 @@ const Map = () => {
     );
     // getSights();
 
+    handleShowModal();
     // await this.props.showModal({ latitude, longitude });
   };
 
@@ -117,6 +125,7 @@ const Map = () => {
 
   return (
     <div style={{ margin: "0 auto" }}>
+      <VerticleModal show={showModal} onHide={() => handleCloseModal()} />
       <InputGroup className="mb-3">
         <DropdownButton
           as={InputGroup.Prepend}
