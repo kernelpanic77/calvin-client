@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import MapGL, { GeolocateControl, Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import marker from "./../assets/marker.png";
 import axios from "axios";
-import Amadeus from "amadeus";
 import {
   Dropdown,
   InputGroup,
   FormControl,
   DropdownButton,
 } from "react-bootstrap";
+import { routes } from "../utils/Mapper";
+
 const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const geolocateStyle = {
@@ -19,23 +20,6 @@ const geolocateStyle = {
 };
 
 const Map = () => {
-  useEffect(() => {
-    const amadeus = new Amadeus({
-      clientId: "V6rUCDGrsB77XkbNmQiMYmJj0a5m2YzA",
-      clientSecret: "TJQC4nss8yPbRSEd",
-    });
-
-    amadeus.referenceData.locations.pointsOfInterest
-      .get({
-        latitude: 17.385,
-        longitude: 78.4867,
-      })
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
   const [viewport, setViewPort] = useState({
     width: "100vw",
     height: "100vh",
@@ -54,32 +38,57 @@ const Map = () => {
       longitude: longitude,
       zoom: prevState.zoom + 2,
     }));
-
     getSights(viewport.latitude, viewport.longitude);
 
     // await this.props.showModal({ latitude, longitude });
   };
 
-  const getSights = async (latitude, longitude) => {
-    const endpoint = "https://api.foursquare.com/v2/venues/search?";
-    const parameters = {
+  const getSights = async (
+    latitude,
+    longitude,
+    endpoint = "4d4b7105d754a06374d81259"
+  ) => {
+    const baseURL = "https://api.foursquare.com/v2/venues/search?";
+    const params = {
       client_id: "SUFVHQILGHMPEPHBJIOJOMNXA5ZQUDY4YI1JQZHXWLMH2MDA",
       client_secret: "RG45BFLYYVBAE0TNJHBTJ1513RRSJXZBXJJV01TXF3UUILKL",
-      ll: "12.967758,77.754238",
-      query: "sights",
+      ll: `${viewport.latitude},${viewport.longitude}`,
       v: "20182507",
+      categoryId: endpoint,
+      radius: 10000,
     };
     try {
-      const data = await axios.get(endpoint + new URLSearchParams(parameters));
+      const data = await axios.get(baseURL + new URLSearchParams(params));
       const venues = data.data.response.venues;
-      console.log(venues);
-    } catch (err) {
-      console.log(err.messag);
+      SetFourSquareResponse(venues);
+      console.log(fourSquareResponse);
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
   const _onViewportChange = (viewport) => {
     setViewPort({ ...viewport, transitionDuration: 100 });
+  };
+
+  const fetchDropDownEndpoint = async (endpoint) => {
+    const baseURL = "https://api.foursquare.com/v2/venues/search?";
+    const params = {
+      client_id: "SUFVHQILGHMPEPHBJIOJOMNXA5ZQUDY4YI1JQZHXWLMH2MDA",
+      client_secret: "RG45BFLYYVBAE0TNJHBTJ1513RRSJXZBXJJV01TXF3UUILKL",
+      ll: `${viewport.latitude},${viewport.longitude}`,
+      v: "20182507",
+      categoryId: endpoint.toString(),
+      radius: 10000,
+    };
+    try {
+      const data = await axios.get(baseURL + new URLSearchParams(params));
+      const venues = data.data.response.venues;
+      SetFourSquareResponse(venues);
+      console.log(fourSquareResponse);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -88,14 +97,18 @@ const Map = () => {
         <DropdownButton
           as={InputGroup.Prepend}
           variant="outline-secondary"
-          title="Dropdown"
+          title="Category"
           id="input-group-dropdown-1"
         >
-          <Dropdown.Item href="#">Action</Dropdown.Item>
-          <Dropdown.Item href="#">Another action</Dropdown.Item>
-          <Dropdown.Item href="#">Something else here</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item href="#">Separated link</Dropdown.Item>
+          {routes.map((curr, idx) => (
+            <Dropdown.Item
+              href="#"
+              key={idx}
+              onClick={() => fetchDropDownEndpoint(curr.endpoint)}
+            >
+              {curr.action}
+            </Dropdown.Item>
+          ))}
         </DropdownButton>
         <FormControl aria-describedby="basic-addon1" />
       </InputGroup>
