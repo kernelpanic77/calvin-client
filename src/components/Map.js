@@ -21,7 +21,7 @@ const geolocateStyle = {
   padding: "10px",
 };
 
-const Map = () => {
+export const Map = () => {
   const [viewport, setViewPort] = useState({
     width: "100vw",
     height: "100vh",
@@ -30,6 +30,7 @@ const Map = () => {
     zoom: 2,
   });
 
+  const [foundLocations, setFoundLocations] = useState([]);
   const [fourSquareResponse, SetFourSquareResponse] = useState([]);
   const [currentRoute, setCurrentRoute] = useState();
 
@@ -39,8 +40,10 @@ const Map = () => {
   }, [currentRoute]);
 
   useEffect(() => {
+    //* idhar dekho bro
     console.log(fourSquareResponse);
-    getLocationsFromDb(fourSquareResponse);
+    postApiResponseToDb(fourSquareResponse);
+    fetchNearByRatings(fourSquareResponse);
   }, [fourSquareResponse]);
 
   const [showModal, setShowModal] = useState(false);
@@ -66,7 +69,28 @@ const Map = () => {
     // await this.props.showModal({ latitude, longitude });
   };
 
-  const getLocationsFromDb = async (data) => {
+  const fetchNearByRatings = async (responseArray) => {
+    console.log(responseArray);
+    responseArray.forEach(async (current) => {
+      const options = {
+        body: {
+          fourSquareId: current.fourSquareId,
+        },
+      };
+      try {
+        const location = await axios.get(
+          "http://localhost:5000/location",
+          options
+        );
+        setFoundLocations([...foundLocations, location]);
+      } catch (err) {
+        console.log(err.message);
+      }
+    });
+    console.log("\n\nsuccess!!!\n\n");
+  };
+
+  const postApiResponseToDb = async (data) => {
     // data.forEach(async (element) => {
     data.forEach(async (element) => {
       try {
@@ -188,5 +212,3 @@ const Map = () => {
     </div>
   );
 };
-
-export default Map;

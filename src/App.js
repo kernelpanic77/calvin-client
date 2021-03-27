@@ -1,5 +1,5 @@
 import "./App.css";
-import Map from "./components/Map";
+import { Map } from "./components/Map";
 import { Error } from "./components/Error";
 import { Fragment, useContext } from "react";
 import { authContext } from "./contexts/auth";
