@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import MapGL, { GeolocateControl } from "react-map-gl";
+import MapGL, { GeolocateControl, Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-
+import marker from "./../assets/marker.png";
 const TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const geolocateStyle = {
@@ -12,17 +12,26 @@ const geolocateStyle = {
 
 const Map = () => {
   const [viewport, setViewPort] = useState({
-    width: "100%",
-    height: 900,
+    width: "100vw",
+    height: "100vh",
     latitude: 0,
     longitude: 0,
     zoom: 2,
   });
 
-  const _onViewportChange = (viewport) => {
-    setViewPort({ ...viewport, transitionDuration: 1000 });
+  const handleMapClick = async (e) => {
+    const [longitude, latitude] = e.lngLat;
+    setViewPort((prevState) => ({
+      ...viewport,
+      latitude: latitude,
+      longitude: longitude,
+      zoom: prevState.zoom + 2,
+    }));
+    // await this.props.showModal({ latitude, longitude });
+  };
 
-    // console.log(viewport);
+  const _onViewportChange = (viewport) => {
+    setViewPort({ ...viewport, transitionDuration: 100 });
   };
 
   return (
@@ -38,7 +47,13 @@ const Map = () => {
         mapboxApiAccessToken={TOKEN}
         mapStyle="mapbox://styles/mapbox/dark-v8"
         onViewportChange={_onViewportChange}
+        onClick={handleMapClick}
       >
+        <Marker latitude={viewport.latitude} longitude={viewport.longitude}>
+          <div>
+            <img src={marker} width="50px" />
+          </div>
+        </Marker>
         <GeolocateControl
           style={geolocateStyle}
           positionOptions={{ enableHighAccuracy: true }}
