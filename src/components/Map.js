@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MapGL, { GeolocateControl, Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import marker from "./../assets/marker.png";
@@ -30,65 +30,89 @@ const Map = () => {
 
   const [fourSquareResponse, SetFourSquareResponse] = useState([]);
 
+  const [currentRoute, setCurrentRoute] = useState();
+
+  useEffect(() => {
+    getSights();
+  }, [currentRoute]);
+
+  useEffect(() => {
+    console.log(fourSquareResponse);
+  }, [fourSquareResponse]);
+
   const handleMapClick = async (e) => {
     const [longitude, latitude] = e.lngLat;
-    setViewPort((prevState) => ({
-      ...viewport,
-      latitude: latitude,
-      longitude: longitude,
-      zoom: prevState.zoom + 2,
-    }));
-    getSights(viewport.latitude, viewport.longitude);
+    setViewPort(
+      (prevState) => ({
+        ...viewport,
+        latitude: latitude,
+        longitude: longitude,
+        zoom: prevState.zoom < 16 ? prevState.zoom + 2 : prevState.zoom,
+      }),
+      () => {
+        getSights();
+      }
+    );
+    // getSights();
 
     // await this.props.showModal({ latitude, longitude });
   };
 
-  const getSights = async (
-    latitude,
-    longitude,
-    endpoint = "4d4b7105d754a06374d81259"
-  ) => {
-    const baseURL = "https://api.foursquare.com/v2/venues/search?";
-    const params = {
-      client_id: "SUFVHQILGHMPEPHBJIOJOMNXA5ZQUDY4YI1JQZHXWLMH2MDA",
-      client_secret: "RG45BFLYYVBAE0TNJHBTJ1513RRSJXZBXJJV01TXF3UUILKL",
-      ll: `${viewport.latitude},${viewport.longitude}`,
-      v: "20182507",
-      categoryId: endpoint,
-      radius: 10000,
+  const getSights = async () =>
+    // latitude,
+    // longitude,
+    // endpoint = "4d4b7105d754a06374d81259"
+    {
+      if (viewport.latitude && viewport.longitude && currentRoute) {
+        console.log(currentRoute);
+        const baseURL = "https://api.foursquare.com/v2/venues/search?";
+        const params = {
+          client_id: "SUFVHQILGHMPEPHBJIOJOMNXA5ZQUDY4YI1JQZHXWLMH2MDA",
+          client_secret: "RG45BFLYYVBAE0TNJHBTJ1513RRSJXZBXJJV01TXF3UUILKL",
+          ll: viewport.latitude + "," + viewport.longitude,
+          v: "20182507",
+          categoryId: currentRoute,
+          radius: 10000,
+        };
+        console.log(viewport.latitude);
+        console.log(viewport.longitude);
+        console.log(currentRoute);
+        try {
+          const data = await axios.get(baseURL + new URLSearchParams(params));
+          console.log(baseURL + new URLSearchParams(params));
+          console.log(currentRoute);
+
+          const venues = data.data.response.venues;
+          SetFourSquareResponse(venues);
+          // console.log(fourSquareResponse);
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
     };
-    try {
-      const data = await axios.get(baseURL + new URLSearchParams(params));
-      const venues = data.data.response.venues;
-      SetFourSquareResponse(venues);
-      console.log(fourSquareResponse);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
 
   const _onViewportChange = (viewport) => {
     setViewPort({ ...viewport, transitionDuration: 100 });
   };
 
   const fetchDropDownEndpoint = async (endpoint) => {
-    const baseURL = "https://api.foursquare.com/v2/venues/search?";
-    const params = {
-      client_id: "SUFVHQILGHMPEPHBJIOJOMNXA5ZQUDY4YI1JQZHXWLMH2MDA",
-      client_secret: "RG45BFLYYVBAE0TNJHBTJ1513RRSJXZBXJJV01TXF3UUILKL",
-      ll: `${viewport.latitude},${viewport.longitude}`,
-      v: "20182507",
-      categoryId: endpoint.toString(),
-      radius: 10000,
-    };
-    try {
-      const data = await axios.get(baseURL + new URLSearchParams(params));
-      const venues = data.data.response.venues;
-      SetFourSquareResponse(venues);
-      console.log(fourSquareResponse);
-    } catch (error) {
-      console.log(error.message);
-    }
+    // const baseURL = "https://api.foursquare.com/v2/venues/search?";
+    // const params = {
+    //   client_id: "SUFVHQILGHMPEPHBJIOJOMNXA5ZQUDY4YI1JQZHXWLMH2MDA",
+    //   client_secret: "RG45BFLYYVBAE0TNJHBTJ1513RRSJXZBXJJV01TXF3UUILKL",
+    //   ll: `${viewport.latitude},${viewport.longitude}`,
+    //   v: "20182507",
+    //   categoryId: endpoint.toString(),
+    //   radius: 10000,
+    // };
+    // try {
+    //   const data = await axios.get(baseURL + new URLSearchParams(params));
+    //   const venues = data.data.response.venues;
+    //   SetFourSquareResponse(venues);
+    //   console.log(fourSquareResponse);
+    // } catch (error) {
+    //   console.log(error.message);
+    // }
   };
 
   return (
@@ -104,7 +128,14 @@ const Map = () => {
             <Dropdown.Item
               href="#"
               key={idx}
-              onClick={() => fetchDropDownEndpoint(curr.endpoint)}
+              onClick={() => {
+                console.log(curr.action);
+                console.log(currentRoute);
+                console.log(curr.endpoint);
+                setCurrentRoute(curr.endpoint);
+                console.log(currentRoute);
+                // getSights();
+              }}
             >
               {curr.action}
             </Dropdown.Item>
