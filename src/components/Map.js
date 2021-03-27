@@ -40,6 +40,7 @@ const Map = () => {
 
   useEffect(() => {
     console.log(fourSquareResponse);
+    getLocationsFromDb(fourSquareResponse);
   }, [fourSquareResponse]);
 
   const [showModal, setShowModal] = useState(false);
@@ -62,8 +63,27 @@ const Map = () => {
     );
     // getSights();
 
-    handleShowModal();
     // await this.props.showModal({ latitude, longitude });
+  };
+
+  const getLocationsFromDb = async (data) => {
+    // data.forEach(async (element) => {
+    data.forEach(async (element) => {
+      try {
+        const options = {
+          body: {
+            fourSquareId: element.id,
+            latitude: element.location.lat,
+            longitude: element.location.lng,
+            name: element.name,
+          },
+        };
+        const res = await axios.post("http://localhost:5000/location", options);
+        console.log(res);
+      } catch (err) {
+        console.log(err.message);
+      }
+    });
   };
 
   const getSights = async () => {
@@ -84,6 +104,7 @@ const Map = () => {
 
         const venues = data.data.response.venues;
         SetFourSquareResponse(venues);
+        // handleShowModal();
         // console.log(fourSquareResponse);
       } catch (error) {
         console.log(error.message);
