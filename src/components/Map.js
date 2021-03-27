@@ -42,9 +42,13 @@ export const Map = () => {
   useEffect(() => {
     //* idhar dekho bro
     console.log(fourSquareResponse);
-    postApiResponseToDb(fourSquareResponse);
+    // postApiResponseToDb(fourSquareResponse);
     fetchNearByRatings(fourSquareResponse);
   }, [fourSquareResponse]);
+
+  useEffect(() => {
+    console.log(foundLocations);
+  }, [foundLocations]);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -69,29 +73,21 @@ export const Map = () => {
     // await this.props.showModal({ latitude, longitude });
   };
 
-  const fetchNearByRatings = async (responseArray) => {
-    console.log(responseArray);
-    responseArray.forEach(async (current) => {
-      const options = {
-        body: {
-          fourSquareId: current.fourSquareId,
-        },
-      };
+  const fetchNearByRatings = async (data) => {
+    data.forEach(async (element) => {
       try {
-        const location = await axios.get(
-          "http://localhost:5000/location",
-          options
-        );
-        setFoundLocations([...foundLocations, location]);
+        const fourSquareId = element.id;
+        const body = { fourSquareId: fourSquareId };
+        const url = "http://localhost:5000/location/" + element.id;
+        const res = await axios.get(url);
+        console.log(res);
       } catch (err) {
-        console.log(err.message);
+        console.log(err);
       }
     });
-    console.log("\n\nsuccess!!!\n\n");
   };
 
   const postApiResponseToDb = async (data) => {
-    // data.forEach(async (element) => {
     data.forEach(async (element) => {
       try {
         const options = {
@@ -105,7 +101,7 @@ export const Map = () => {
         const res = await axios.post("http://localhost:5000/location", options);
         console.log(res);
       } catch (err) {
-        console.log(err.message);
+        console.log(err);
       }
     });
   };
@@ -140,26 +136,6 @@ export const Map = () => {
     setViewPort({ ...viewport, transitionDuration: 100 });
   };
 
-  const fetchDropDownEndpoint = async (endpoint) => {
-    // const baseURL = "https://api.foursquare.com/v2/venues/search?";
-    // const params = {
-    //   client_id: "SUFVHQILGHMPEPHBJIOJOMNXA5ZQUDY4YI1JQZHXWLMH2MDA",
-    //   client_secret: "RG45BFLYYVBAE0TNJHBTJ1513RRSJXZBXJJV01TXF3UUILKL",
-    //   ll: `${viewport.latitude},${viewport.longitude}`,
-    //   v: "20182507",
-    //   categoryId: endpoint.toString(),
-    //   radius: 10000,
-    // };
-    // try {
-    //   const data = await axios.get(baseURL + new URLSearchParams(params));
-    //   const venues = data.data.response.venues;
-    //   SetFourSquareResponse(venues);
-    //   console.log(fourSquareResponse);
-    // } catch (error) {
-    //   console.log(error.message);
-    // }
-  };
-
   return (
     <div style={{ margin: "0 auto" }}>
       <VerticleModal show={showModal} onHide={() => handleCloseModal()} LocType={currentRoute} />
@@ -175,11 +151,7 @@ export const Map = () => {
               href="#"
               key={idx}
               onClick={() => {
-                //console.log(curr.action);
-                //console.log(currentRoute);
-                //console.log(curr.endpoint);
                 setCurrentRoute(curr.endpoint);
-                //console.log(currentRoute);
                 // getSights();
               }}
             >
