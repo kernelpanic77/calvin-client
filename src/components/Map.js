@@ -20,6 +20,8 @@ const Map = () => {
     zoom: 2,
   });
 
+  const [fourSquareResponse, SetFourSquareResponse] = useState([]);
+
   const handleMapClick = async (e) => {
     const [longitude, latitude] = e.lngLat;
     setViewPort((prevState) => ({
@@ -45,7 +47,8 @@ const Map = () => {
     };
     try {
       const data = await axios.get(endpoint + new URLSearchParams(parameters));
-      console.log(data);
+      const venues = data.data.response.venues;
+      console.log(venues);
     } catch (err) {
       console.log(err.messag);
     }
