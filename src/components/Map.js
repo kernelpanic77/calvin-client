@@ -66,38 +66,30 @@ const Map = () => {
     // await this.props.showModal({ latitude, longitude });
   };
 
-  const getSights = async () =>
-    // latitude,
-    // longitude,
-    // endpoint = "4d4b7105d754a06374d81259"
-    {
-      if (viewport.latitude && viewport.longitude && currentRoute) {
+  const getSights = async () => {
+    if (viewport.latitude && viewport.longitude && currentRoute) {
+      const baseURL = "https://api.foursquare.com/v2/venues/search?";
+      const params = {
+        client_id: "SUFVHQILGHMPEPHBJIOJOMNXA5ZQUDY4YI1JQZHXWLMH2MDA",
+        client_secret: "RG45BFLYYVBAE0TNJHBTJ1513RRSJXZBXJJV01TXF3UUILKL",
+        ll: viewport.latitude + "," + viewport.longitude,
+        v: "20182507",
+        categoryId: currentRoute,
+        radius: 10000,
+      };
+      try {
+        const data = await axios.get(baseURL + new URLSearchParams(params));
+        console.log(baseURL + new URLSearchParams(params));
         console.log(currentRoute);
-        const baseURL = "https://api.foursquare.com/v2/venues/search?";
-        const params = {
-          client_id: "SUFVHQILGHMPEPHBJIOJOMNXA5ZQUDY4YI1JQZHXWLMH2MDA",
-          client_secret: "RG45BFLYYVBAE0TNJHBTJ1513RRSJXZBXJJV01TXF3UUILKL",
-          ll: viewport.latitude + "," + viewport.longitude,
-          v: "20182507",
-          categoryId: currentRoute,
-          radius: 10000,
-        };
-        console.log(viewport.latitude);
-        console.log(viewport.longitude);
-        console.log(currentRoute);
-        try {
-          const data = await axios.get(baseURL + new URLSearchParams(params));
-          console.log(baseURL + new URLSearchParams(params));
-          console.log(currentRoute);
 
-          const venues = data.data.response.venues;
-          SetFourSquareResponse(venues);
-          // console.log(fourSquareResponse);
-        } catch (error) {
-          console.log(error.message);
-        }
+        const venues = data.data.response.venues;
+        SetFourSquareResponse(venues);
+        // console.log(fourSquareResponse);
+      } catch (error) {
+        console.log(error.message);
       }
-    };
+    }
+  };
 
   const _onViewportChange = (viewport) => {
     setViewPort({ ...viewport, transitionDuration: 100 });
