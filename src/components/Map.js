@@ -65,7 +65,7 @@ export const Map = () => {
       }
     );
     // getSights();
-
+      handleShowModal();
     // await this.props.showModal({ latitude, longitude });
   };
 
@@ -162,12 +162,12 @@ export const Map = () => {
 
   return (
     <div style={{ margin: "0 auto" }}>
-      <VerticleModal show={showModal} onHide={() => handleCloseModal()} />
+      <VerticleModal show={showModal} onHide={() => handleCloseModal()} LocType={currentRoute} />
       <InputGroup className="mb-3">
         <DropdownButton
           as={InputGroup.Prepend}
           variant="outline-secondary"
-          title="Category"
+          title={currentRoute}
           id="input-group-dropdown-1"
         >
           {routes.map((curr, idx) => (
@@ -175,11 +175,11 @@ export const Map = () => {
               href="#"
               key={idx}
               onClick={() => {
-                console.log(curr.action);
-                console.log(currentRoute);
-                console.log(curr.endpoint);
+                //console.log(curr.action);
+                //console.log(currentRoute);
+                //console.log(curr.endpoint);
                 setCurrentRoute(curr.endpoint);
-                console.log(currentRoute);
+                //console.log(currentRoute);
                 // getSights();
               }}
             >

@@ -1,8 +1,10 @@
 import React from "react";
-import {Modal, Button} from "react-bootstrap";
+import {Modal, Button, ListGroup} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function VerticleModal(props) {
+
+  console.log(props.LocType);
     return (
       <Modal
         {...props}
@@ -17,11 +19,13 @@ function VerticleModal(props) {
         </Modal.Header>
         <Modal.Body>
           <h4>Centered Modal</h4>
-          <p>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-            consectetur ac, vestibulum at eros.
-          </p>
+          <ListGroup>
+            <ListGroup.Item>Cras justo odio</ListGroup.Item>
+            <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+            <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+            <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
+            <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+          </ListGroup>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
