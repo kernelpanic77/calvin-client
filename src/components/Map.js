@@ -80,10 +80,6 @@ const Map = () => {
           style={geolocateStyle}
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation={true}
-          onGeolocate={(viewport) => {
-            console.log(viewport);
-            return;
-          }}
         />
       </MapGL>
     </div>
