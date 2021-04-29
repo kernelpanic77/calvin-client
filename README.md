@@ -1,70 +1,22 @@
-# Getting Started with Create React App
+##Inspiration
+This project is inspired from the current situation in many countries where people are looking for an opportunity to travel but are unsure on doing so due to the current ongoing pandemic. In lots of places people do not follow covid safety guidelines and we should ensure proper precautions while going to such places.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+##What it does
+The application has a mapbox via which the user can select a location through the given marker. This gives a modal pop-up which gives the covid rating for the surrounding locations. The covid rating of a place is a parameter which represents how often do people follow covid safety protocols. This would help the user know whether it is safe to visit these places in this covid era.
 
-## Available Scripts
+##How we built it
+We built it using node, express.js , react, mongodb. We built this on top of mapbox api and foursquare api.
 
-In the project directory, you can run:
+##Challenges we ran into
+We had a major problem with axios where we were not able to communicate with the api. This caused a big issue initially, however we were able to solve it.
+We ran into time constraint issues due to which we were not able to complete the project
+Accomplishments that we're proud of
+We were able to associate a covid rating with all points of interests near some locations which are visited by a lot of people. We also are on the path to associate a covid rating with all points of interests near all locations.
+We were able to integrate mapbox into react and seed covid ratings into the database using location ids of foursquare api.
+What we learned
+We learnt about integrating mapbox with react and foursquare api. By debugging more bugs in axios, we also got more proficient in axios as well.
 
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+##What's next for SafeExcursions
+A better UI which show's each locations covid rating by mouse hover.
+A more efficient backend which allows us to seed multiple points of interests onto the database so that we could store more covid ratings and help the users to know whether these points of interests are safe to travel to.
+This platform would also have experiences of people to visit these point of interests. These blogs by users can help other users take necessary precautions. *Implement user authentication and the ability to add covid rating and comments for a particular place
